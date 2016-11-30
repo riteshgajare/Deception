@@ -7,8 +7,40 @@
 window.game = window.game || {};
 
 window.game.core = function () {
+  const killRate = 10;
   var _game = {
     // Attributes
+    hud: {
+      create: function() {
+        var opts = {
+          lines: 12, // The number of lines to draw
+          angle: 0.15, // The length of each line
+          lineWidth: 0.44, // The line thickness
+          pointer: {
+            length: 0.9, // The radius of the inner circle
+            strokeWidth: 0.044, // The rotation offset
+            color: '#000000' // Fill color
+          },
+          limitMax: 'false',   // If true, the pointer will not go past the end of the gauge
+          colorStart: '#A6A0B8',   // Colors
+          colorStop: '#A6A0B8',    // just experiment with them
+          strokeColor: '#01ffffff',   // to see which ones work best for you
+          generateGradient: true
+        };
+        var target = document.getElementById('foo'); // your canvas element
+        _game.hud.gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        _game.hud.gauge.maxValue = _game.player.speedMax + 20; // set max gauge value
+        _game.hud.gauge.animationSpeed = 13; // set animation speed (32 is default value)
+        _game.hud.gauge.set(0); // set actual value
+      },
+      updateGauge: function() {
+        // Update the acceleration gauge here
+        if (_game.player[_game.player.playerAccelerationValues.position.acceleration] > 0 )
+          _game.hud.gauge.set(0);
+        else
+          _game.hud.gauge.set(-_game.player[_game.player.playerAccelerationValues.position.acceleration]);
+      }
+    },
     player: {
       // Attributes
 
@@ -18,18 +50,19 @@ window.game.core = function () {
       shape: null,
       rigidBody: null,
       // Player mass which affects other rigid bodies in the world
-      mass: 3,
-
+      mass: 1000,
+      health: 100,
+      strength: 1,
       // HingeConstraint to limit player's air-twisting
       orientationConstraint: null,
 
       // Jump flags
       isGrounded: false,
-      jumpHeight: 38,
+      jumpHeight: 40,
 
       // Configuration for player speed (acceleration and maximum speed)
       speed: 1.5,
-      speedMax: 15,
+      speedMax: 50,
       // Configuration for player rotation (rotation acceleration and maximum rotation speed)
       rotationSpeed: 0.007,
       rotationSpeedMax: 0.04,
@@ -68,7 +101,7 @@ window.game.core = function () {
       // Keyboard configuration for game.events.js (controlKeys must be associated to game.events.keyboard.keyCodes)
       controlKeys: {
         forward: "w",
-        backward: "s",
+        //backward: "s",
         left: "a",
         right: "d",
         jump: "space"
@@ -92,7 +125,12 @@ window.game.core = function () {
         _game.player.mesh = _cannon.addVisual(_game.player.rigidBody, null, _game.player.model.mesh);
 
         // Create a HingeConstraint to limit player's air-twisting - this needs improvement
-        _game.player.orientationConstraint = new CANNON.HingeConstraint(_game.player.rigidBody, new CANNON.Vec3(0, 0, 0), new CANNON.Vec3(0, 0, 1), _game.player.rigidBody, new CANNON.Vec3(0, 0, 1), new CANNON.Vec3(0, 0, 1));
+        _game.player.orientationConstraint = new CANNON.HingeConstraint(_game.player.rigidBody,
+                                                                        new CANNON.Vec3(0, 0, 0),
+                                                                        new CANNON.Vec3(0, 0, 1),
+                                                                        _game.player.rigidBody,
+                                                                        new CANNON.Vec3(0, 0, 1),
+                                                                        new CANNON.Vec3(0, 0, 1));
         _cannon.world.addConstraint(_game.player.orientationConstraint);
 
         _game.player.rigidBody.postStep = function() {
@@ -118,9 +156,11 @@ window.game.core = function () {
         _game.player.accelerate();
         _game.player.rotate();
         _game.player.updateCamera();
-
+        _game.hud.updateGauge();
         // Level-specific logic
+        _game.player.checkCollision();
         _game.player.checkGameOver();
+
       },
       updateCamera: function() {
         // Calculate camera coordinates by using Euler radians from player's last rotation
@@ -241,6 +281,14 @@ window.game.core = function () {
         if (_game.player.mesh.position.z <= -800) {
           _game.destroy();
         }
+        if (_game.player.health <= 0) {
+          _game.destroy();
+        }
+      },
+      checkCollision: function () {
+        if (_cannon.getCollisions(_game.player.rigidBody.index) > 1) {
+          _game.player.health = _game.player.health - killRate / _game.player.strength;
+        }
       }
     },
     level: {
@@ -248,17 +296,16 @@ window.game.core = function () {
       create: function() {
         // Create a solid material for all objects in the world
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
-
         // Define floor settings
         var floorSize = 500;
-        var floorHeight = 20;
+        var floorHeight = 10;
 
         // Add a floor
         _cannon.createRigidBody({
           shape: new CANNON.Box(new CANNON.Vec3(floorSize, floorSize, floorHeight)),
           mass: 0,
           position: new CANNON.Vec3(0, 0, -floorHeight),
-          meshMaterial: new THREE.MeshLambertMaterial({ color: window.game.static.colors.black }),
+          meshMaterial: _texture.getTextureMaterial({ width: floorSize, height: floorSize, repeatX: 20 , repeatY: 20}, _texture.grass),
           physicsMaterial: _cannon.solidMaterial
         });
 
@@ -271,15 +318,11 @@ window.game.core = function () {
           physicsMaterial: _cannon.solidMaterial
         });
 
+        var gem = _texture.getGem({positionZ: 15});
+        _three.scene.add ( gem );
 
-        // // Grid Helper
-        var ground = _texture.getGrass( { width: floorSize * 2, height: floorSize * 2, repeatX: 20 , repeatY: 20 } );
-        _three.scene.add( ground );
-
-        var road = _texture.getRoad( { width: floorSize, height: floorSize * 2, repeatX: 20 , repeatY: 20 } );
-        road.translateZ(0.1);
-        _three.scene.add( road );
-
+        var skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
+        _three.scene.add( skyboxMesh );
       }
     },
 
@@ -291,7 +334,7 @@ window.game.core = function () {
       // Create player and level
       _game.player.create();
       _game.level.create();
-
+      _game.hud.create();
       // Initiate the game loop
       _game.loop();
     },
@@ -323,7 +366,6 @@ window.game.core = function () {
       // Update Cannon.js world and player state
       _cannon.updatePhysics();
       _game.player.update();
-
       // Render visual scene
       _three.render();
     },

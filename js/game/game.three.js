@@ -19,7 +19,7 @@ window.game.three = function() {
     scene: null,
     renderer: null,
     // Field of view default setting for the camera
-    fov: 45,
+    fov: 60,
 
     // Methods
     init: function(options) {
@@ -36,6 +36,12 @@ window.game.three = function() {
         document.body.appendChild(_three.domContainer);
       }
 
+      // _three.hudCanvas = document.createElement('canvas');
+      // _three.hudCanvas.width = 512; //_three.cameraSizeConstraint.width;
+      // _three.hudCanvas.height = 512; // _three.cameraSizeConstraint.height;
+      // _three.hudCanvas.bottom = 10;
+      // _three.hudCanvas.left = 10;
+      // _three.cameraHUD = new THREE.OrthographicCamera(-_three.hudCanvas.width/2, _three.hudCanvas.width/2, _three.hudCanvas.height/2, -_three.hudCanvas.height/2, 0, 30 );
       // Basic scene and lights setup
       _three.setup();
 
@@ -65,7 +71,7 @@ window.game.three = function() {
     setup: function () {
       // Setup main scene
       _three.scene = new THREE.Scene();
-
+      // _three.sceneHUD = new THREE.Scene();
       // Call lights setup method defined in game.core.js if existing
       if (_three.setupLights) {
         _three.setupLights();
@@ -74,6 +80,8 @@ window.game.three = function() {
     render: function() {
       // Update the scene
       _three.renderer.render(_three.scene, _three.camera);
+      // _three.renderer.render(_three.sceneHUD, _three.cameraHUD);
+
     },
     onWindowResize: function() {
       // Keep screen size when window resizes

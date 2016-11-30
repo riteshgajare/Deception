@@ -25,7 +25,15 @@
         background:#ffffff;
         box-sizing:border-box;
       }
-
+      #hud {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        background: transparent
+        margin: auto;
+        background-color: black;
+        bottom: 150px;
+      }
       .fade-out {
         opacity:0;
         transition:opacity 2000ms;
@@ -35,8 +43,11 @@
   </head>
 
   <body>
-    <div id="game"></div>
-
+    <div id="game">
+      <div id="hud" ng-class="{visible: style.visible, transparent: style.transparent, perspective: style.perspective, animated: style.animated}">
+        <canvas id="foo"></canvas>
+      </div>
+    </div>
     <div id="infobox-intro" class="infobox">
       <h2>Frogger 3D</h2>
       <p>You can control the player by using the follow keys:</p>
@@ -49,6 +60,7 @@
     <script src="js/libs/detector.js"></script>
     <script src="js/libs/three.min.js"></script>
     <script src="js/libs/cannon.js"></script>
+    <script src="js/libs/gauge.min.js"></script>
 
     <script src="js/game/game.static.js"></script>
     <script src="js/game/game.three.js"></script>
@@ -59,7 +71,9 @@
     <script src="js/game/game.core.demo1.js"></script>
     <script src="js/game/game.models.js"></script>
     <script src="js/game/game.texture.js"></script>
+
     <script>
+
       if (!Detector.webgl) {
         Detector.addGetWebGLMessage();
       } else {
