@@ -19,6 +19,8 @@ window.game.three = function() {
     scene: null,
     renderer: null,
     // Field of view default setting for the camera
+    spotLightHelper: null,
+
     fov: 60,
 
     // Methods
@@ -52,6 +54,8 @@ window.game.three = function() {
 
       // Define default WebGL renderer
       _three.renderer = new THREE.WebGLRenderer({ antialias: true });
+      _three.renderer.shadowMap.enabled = true;
+      _three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
       // Set the background color (HTML background will be used if this option is omitted)
       if (options && typeof options.rendererClearColor === "number") {
@@ -79,6 +83,7 @@ window.game.three = function() {
     },
     render: function() {
       // Update the scene
+      _three.spotLightHelper.update();
       _three.renderer.render(_three.scene, _three.camera);
       // _three.renderer.render(_three.sceneHUD, _three.cameraHUD);
 
@@ -136,7 +141,7 @@ window.game.three = function() {
 
       // Assign the material(s) to the created mesh
       model.mesh = new THREE.Mesh(jsonModel.geometry, meshMaterial);
-
+      model.mesh.castShadow = true;
       // Return an object containing a mesh and its halfExtents
       return model;
     },

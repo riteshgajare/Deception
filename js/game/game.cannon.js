@@ -29,7 +29,7 @@ window.game.cannon = function() {
     playerPhysicsMaterial: null,
     // Solid material for all other level objects
     solidMaterial: null,
-
+    gemMaterial: null,
     // Methods
     init: function(three) {
       // A small collision detection extension to get the indices of the collision pair
@@ -125,6 +125,9 @@ window.game.cannon = function() {
         body.visualref.visualId = _cannon.bodies.length - 1;
 
         // Add body/mesh to scene/world
+        // mesh.receiveShadow = true;
+        // mesh.castShadow = true;
+
         _three.scene.add(mesh);
         _cannon.world.add(body);
       }

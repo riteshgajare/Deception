@@ -16,7 +16,7 @@ window.game.texture = function() {
     grass: 'textures/grass.jpg',
 
     road: 'textures/minecraft_stone.jpg',
-
+    gemSize: 5,
     getTextureMaterial: function(opts, type) {
       opts		= opts	|| {}
       var width	= opts.width !== undefined ? opts.width : 1
@@ -36,7 +36,7 @@ window.game.texture = function() {
       textureDiffuse.repeat.y= repeatY
       textureDiffuse.anisotropy = anisotropy;
 
-      var material	= new THREE.MeshBasicMaterial({
+      var material	= new THREE.MeshPhongMaterial({
         map		: textureDiffuse,
         normalScale	: new THREE.Vector2(1,1).multiplyScalar(0.5),
       })
@@ -45,7 +45,7 @@ window.game.texture = function() {
     getGem: function(opts) {
       opts		= opts	|| {}
       var color	= opts.color !== undefined ? opts.color : 0x00ff00;
-      var radius = opts.radius !== undefined ? opts.radius : 5;
+      var radius = opts.radius !== undefined ? opts.radius : _texture.gemSize;
       var positionX	= opts.positionX !== undefined ? opts.positionX : 0;
       var positionY	= opts.positionY !== undefined ? opts.positionY : 0;
       var positionZ	= opts.positionZ !== undefined ? opts.positionZ : 0;

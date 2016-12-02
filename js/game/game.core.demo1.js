@@ -8,6 +8,8 @@ window.game = window.game || {};
 
 window.game.core = function () {
   const killRate = 10;
+  var difficulty = 1;
+  var lifes = 3;
   var _game = {
     // Attributes
     hud: {
@@ -71,7 +73,7 @@ window.game.core = function () {
       rotationAngleX: null,
       rotationAngleY: null,
       // Damping which means deceleration	(values between 0.8 and 0.98 are recommended)
-      damping: 0.9,
+      damping: 1,
       // Damping or easing for player rotation
       rotationDamping: 0.8,
       // Acceleration values
@@ -101,7 +103,7 @@ window.game.core = function () {
       // Keyboard configuration for game.events.js (controlKeys must be associated to game.events.keyboard.keyCodes)
       controlKeys: {
         forward: "w",
-        //backward: "s",
+        backward: "s",
         left: "a",
         right: "d",
         jump: "space"
@@ -114,8 +116,8 @@ window.game.core = function () {
 
         // Create a player character based on an imported 3D model that was already loaded as JSON into game.models.player
         _game.player.model = _three.createModel(window.game.models.player, 12, [
-          new THREE.MeshLambertMaterial({ color: window.game.static.colors.cyan, shading: THREE.FlatShading }),
-          new THREE.MeshLambertMaterial({ color: window.game.static.colors.green, shading: THREE.FlatShading })
+          new THREE.MeshLambertMaterial({ color: window.game.static.colors.orange, shading: THREE.FlatShading }),
+          new THREE.MeshLambertMaterial({ color: window.game.static.colors.darkslategray, shading: THREE.FlatShading })
         ]);
 
         // Create the shape, mesh and rigid body for the player character and assign the physics material to it
@@ -176,7 +178,9 @@ window.game.core = function () {
       },
       updateAcceleration: function(values, direction) {
         // Distinguish between acceleration/rotation and forward/right (1) and backward/left (-1)
-        if (direction === 1) {
+        if (direction == 2) {
+          _game.player[values.acceleration] = _game.player[values.acceleration] / 1.05;//-_game.player[values.speedMax];
+        } else if (direction === 1) {
           // Forward/right
           if (_game.player[values.acceleration] > -_game.player[values.speedMax]) {
             if (_game.player[values.acceleration] >= _game.player[values.speedMax] / 2) {
@@ -217,7 +221,7 @@ window.game.core = function () {
         }
 
         if (_events.keyboard.pressed[_game.player.controlKeys.backward]) {
-          _game.player.updateAcceleration(_game.player.playerAccelerationValues.position, -1);
+          _game.player.updateAcceleration(_game.player.playerAccelerationValues.position, 2);
         }
 
         if (_events.keyboard.pressed[_game.player.controlKeys.right]) {
@@ -284,49 +288,74 @@ window.game.core = function () {
         if (_game.player.health <= 0) {
           _game.destroy();
         }
+        if (lifes == 0) {
+          _game.gameOver();
+        }
       },
       checkCollision: function () {
         if (_cannon.getCollisions(_game.player.rigidBody.index) > 1) {
           _game.player.health = _game.player.health - killRate / _game.player.strength;
         }
+        for(var i = 0; i < _game.level.gems.length; i++) {
+          if (_cannon.getCollisions(_game.level.gems[i].index)) {
+            _game.player.speedMax += 50;
+            _cannon.removeVisual(_game.level.gems[i]);
+          }
+        }
+
       }
     },
     level: {
       // Methods
+      gems: [],
+      createGem: function (positionX, positionY, positionZ) {
+        var gem = _cannon.createRigidBody({
+          shape: new CANNON.Box(new CANNON.Vec3(_texture.gemSize, _texture.gemSize, _texture.gemSize)),
+          mass: 0,
+          position: new CANNON.Vec3(positionX, positionY, positionZ),
+          customMesh: _texture.getGem({ positionX: positionX, positionY: positionY, positionZ: positionZ }),
+          physicsMaterial: _cannon.gemMaterial
+        });
+        _game.level.gems.push(gem);
+      },
       create: function() {
         // Create a solid material for all objects in the world
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
+        _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
+
         // Define floor settings
         var floorSize = 500;
         var floorHeight = 10;
-
         // Add a floor
         _cannon.createRigidBody({
-          shape: new CANNON.Box(new CANNON.Vec3(floorSize, floorSize, floorHeight)),
+          shape: new CANNON.Box(new CANNON.Vec3(floorSize*10, floorSize / 10, floorHeight)),
           mass: 0,
           position: new CANNON.Vec3(0, 0, -floorHeight),
-          meshMaterial: _texture.getTextureMaterial({ width: floorSize, height: floorSize, repeatX: 20 , repeatY: 20}, _texture.grass),
+          meshMaterial: new THREE.MeshPhongMaterial({ color: window.game.static.colors.gray }), //_texture.getTextureMaterial({ width: floorSize, height: floorSize, repeatX: 20 , repeatY: 2}, _texture.grass),
           physicsMaterial: _cannon.solidMaterial
         });
-
-        // // Add some boxes
         _cannon.createRigidBody({
-          shape: new CANNON.Box(new CANNON.Vec3(floorSize, 30, 30)),
+          shape: new CANNON.Box(new CANNON.Vec3(floorSize*10, floorSize / 10, floorHeight)),
           mass: 0,
-          position: new CANNON.Vec3(floorSize/2, floorSize, floorHeight),
-          meshMaterial: new THREE.MeshLambertMaterial({ color: window.game.static.colors.cyan }),
+          position: new CANNON.Vec3(0, floorSize / 2, - floorHeight),
+          meshMaterial: new THREE.MeshPhongMaterial({ color: window.game.static.colors.gray }), //_texture.getTextureMaterial({ width: floorSize, height: floorSize, repeatX: 20 , repeatY: 2}, _texture.grass),
+          physicsMaterial: _cannon.solidMaterial
+        });
+        _cannon.createRigidBody({
+          shape: new CANNON.Box(new CANNON.Vec3(floorSize / 10, floorSize / 10, 2 * floorHeight)),
+          mass: 0,
+          position: new CANNON.Vec3( -floorSize / 2, 0,  0),
+          meshMaterial: new THREE.MeshPhongMaterial({ color: window.game.static.colors.gray }), //_texture.getTextureMaterial({ width: floorSize, height: floorSize, repeatX: 20 , repeatY: 2}, _texture.grass),
           physicsMaterial: _cannon.solidMaterial
         });
 
-        var gem = _texture.getGem({positionZ: 15});
-        _three.scene.add ( gem );
+        // Create some gems in order to increase the speed
+        _game.level.createGem( -400, 0, floorHeight );
 
         var skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
         _three.scene.add( skyboxMesh );
       }
     },
-
-    // Methods
     init: function(options) {
       // Setup necessary game components (_events, _three, _cannon, _ui)
       _game.initComponents(options);
@@ -338,10 +367,14 @@ window.game.core = function () {
       // Initiate the game loop
       _game.loop();
     },
+    gameOver: function() {
+      window.cancelAnimationFrame(_animationFrameLoop);
+      _cannon.destroy();
+      _three.destroy();
+    },
     destroy: function() {
       // Pause animation frame loop
       window.cancelAnimationFrame(_animationFrameLoop);
-
       // Destroy THREE.js scene and Cannon.js world and recreate them
       _cannon.destroy();
       _cannon.setup();
@@ -355,7 +388,7 @@ window.game.core = function () {
       // Create player and level again
       _game.player.create();
       _game.level.create();
-
+      lifes -= 1;
       // Continue with the game loop
       _game.loop();
     },
@@ -381,14 +414,34 @@ window.game.core = function () {
         var hemiLight = new THREE.HemisphereLight(window.game.static.colors.white, window.game.static.colors.white, 0.6);
         hemiLight.position.set(0, 0, -1);
         _three.scene.add(hemiLight);
+        var ambient = new THREE.AmbientLight( 0x111111 );
+        _three.scene.add ( ambient );
+        var spotLight = new THREE.SpotLight( 0xffffff );
+        spotLight.position.set( 0, 0, 1000 );
+
+        spotLight.castShadow = true;
+
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+
+        spotLight.shadow.camera.near = 500;
+        spotLight.shadow.camera.far = 4000;
+        spotLight.shadow.camera.fov = 30;
+
+        //_three.scene.add( spotLight );
+
+        _three.spotLightHelper = new THREE.SpotLightHelper( spotLight );
+        //_three.scene.add( _three.spotLightHelper );
 
         var pointLight = new THREE.PointLight(window.game.static.colors.white, 0.5);
         pointLight.position.set(0, 0, 500);
+
         _three.scene.add(pointLight);
       };
 
       // Initialize components with options
       _three.init(options);
+      //_cannon.gravity = -25;
       _cannon.init(_three);
       _ui.init();
       _events.init();
