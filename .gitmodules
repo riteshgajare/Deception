@@ -1,0 +1,3 @@
+[submodule "js/libs/THREE.Fire"]
+	path = js/libs/THREE.Fire
+	url = https://github.com/mattatz/THREE.Fire.git

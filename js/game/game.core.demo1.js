@@ -31,7 +31,7 @@ window.game.core = function () {
         };
         var target = document.getElementById('foo'); // your canvas element
         _game.hud.gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-        _game.hud.gauge.maxValue = _game.player.speedMax + 20; // set max gauge value
+        _game.hud.gauge.maxValue = _game.player.speedMax + 50; // set max gauge value
         _game.hud.gauge.animationSpeed = 13; // set animation speed (32 is default value)
         _game.hud.gauge.set(0); // set actual value
       },
@@ -67,7 +67,7 @@ window.game.core = function () {
       speedMax: 50,
       // Configuration for player rotation (rotation acceleration and maximum rotation speed)
       rotationSpeed: 0.007,
-      rotationSpeedMax: 0.04,
+      rotationSpeedMax: 0.02,
       // Rotation values
       rotationRadians: new THREE.Vector3(0, 0, 0),
       rotationAngleX: null,
@@ -178,8 +178,9 @@ window.game.core = function () {
       },
       updateAcceleration: function(values, direction) {
         // Distinguish between acceleration/rotation and forward/right (1) and backward/left (-1)
+        // direction (2) is for brakes.
         if (direction == 2) {
-          _game.player[values.acceleration] = _game.player[values.acceleration] / 1.05;//-_game.player[values.speedMax];
+          _game.player[values.acceleration] = _game.player[values.acceleration] / 1.05;
         } else if (direction === 1) {
           // Forward/right
           if (_game.player[values.acceleration] > -_game.player[values.speedMax]) {
@@ -326,7 +327,7 @@ window.game.core = function () {
         // Define floor settings
         var floorSize = 500;
         var floorHeight = 10;
-        // Add a floor
+        //Add a floor
         _cannon.createRigidBody({
           shape: new CANNON.Box(new CANNON.Vec3(floorSize*10, floorSize / 10, floorHeight)),
           mass: 0,
@@ -349,11 +350,28 @@ window.game.core = function () {
           physicsMaterial: _cannon.solidMaterial
         });
 
-        // Create some gems in order to increase the speed
+        //Create some gems in order to increase the speed
         _game.level.createGem( -400, 0, floorHeight );
 
-        var skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
-        _three.scene.add( skyboxMesh );
+        _game.level.skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
+        var tex = new THREE.TextureLoader().load('textures/Fire.png');
+
+        var wireframeMat = new THREE.MeshBasicMaterial({
+          color : new THREE.Color(0xffffff),
+          wireframe : true
+        });
+
+        var fire = new THREE.Fire( tex );
+
+        var wireframe = new THREE.Mesh(fire.geometry, wireframeMat.clone());
+        fire.add(wireframe);
+        wireframe.visible = true;
+        fire.translateZ(20);
+        fire.scale.set(100,100,100);
+        _three.scene.add ( fire );
+
+        _three.scene.add( _game.level.skyboxMesh );
+
       }
     },
     init: function(options) {
@@ -395,7 +413,6 @@ window.game.core = function () {
     loop: function() {
       // Assign an id to the animation frame loop
       _animationFrameLoop = window.requestAnimationFrame(_game.loop);
-
       // Update Cannon.js world and player state
       _cannon.updatePhysics();
       _game.player.update();
