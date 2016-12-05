@@ -354,23 +354,24 @@ window.game.core = function () {
         _game.level.createGem( -400, 0, floorHeight );
 
         _game.level.skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
-        var tex = new THREE.TextureLoader().load('textures/Fire.png');
-
-        var wireframeMat = new THREE.MeshBasicMaterial({
-          color : new THREE.Color(0xffffff),
-          wireframe : true
-        });
-
-        var fire = new THREE.Fire( tex );
-
-        var wireframe = new THREE.Mesh(fire.geometry, wireframeMat.clone());
-        fire.add(wireframe);
-        wireframe.visible = true;
-        fire.translateZ(20);
-        fire.scale.set(100,100,100);
-        _three.scene.add ( fire );
-
         _three.scene.add( _game.level.skyboxMesh );
+
+        // var tex = new THREE.TextureLoader().load('textures/Fire.png');
+
+        // var wireframeMat = new THREE.MeshBasicMaterial({
+        //   color : new THREE.Color(0xffffff),
+        //   wireframe : true
+        // });
+
+        // var fire = new THREE.Fire( tex );
+
+        // var wireframe = new THREE.Mesh(fire.geometry, wireframeMat.clone());
+        // fire.add(wireframe);
+        // wireframe.visible = true;
+        // fire.translateZ(20);
+        // fire.scale.set(100,100,100);
+        //_three.scene.add ( fire );
+
 
       }
     },
