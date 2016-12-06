@@ -14,6 +14,17 @@ window.game.texture = function() {
   var _texture = {
 
     grass: 'textures/grass.jpg',
+    green: 'textures/Green.png',
+    blue: 'textures/Blue.jpg',
+    greenPure: 'textures/Green_Pure.png',
+     pink: 'textures/pink.jpg',
+     normalBlue: 'textures/normalBlue.png',
+     gray: 'textures/Gray.jpeg',
+     red: 'textures/Red.jpg',
+     finish: 'textures/finish.png',
+     greenEarth: 'textures/green_earth.jpg',
+     blueEarth: 'textures/blue_earth.jpg',
+
 
     road: 'textures/minecraft_stone.jpg',
     gemSize: 5,
@@ -78,12 +89,39 @@ window.game.texture = function() {
       return object3D;
     },
     getSkybox: function(urlPrefix) {
-      var urls = [ urlPrefix + "px.jpg",
-                   urlPrefix + "nx.jpg",
-                   urlPrefix + "py.jpg",
-                   urlPrefix + "ny.jpg",
-                   urlPrefix + "pz.jpg",
-                   urlPrefix + "nz.jpg" ];
+      var urls = [ urlPrefix + "sum.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg" ];
+      var textureCube = THREE.ImageUtils.loadTextureCube( urls );
+      textureCube.format = THREE.RGBFormat;
+      textureCube.mapping = THREE.CubeRefractionMapping;
+
+      var shader = THREE.ShaderLib["cube"];
+      var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+      uniforms['tCube'].value= textureCube;   // textureCube has been init before
+      var material = new THREE.ShaderMaterial({
+        fragmentShader    : shader.fragmentShader,
+        vertexShader  : shader.vertexShader,
+        uniforms  : uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
+      });
+      var skyboxMesh = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000, 1, 1, 1, null, true ), material );
+      skyboxMesh.translateZ(100);
+      skyboxMesh.rotateX(window.game.helpers.degToRad(90));
+      // skyboxMesh.frustumCulled = false;
+      return skyboxMesh;
+    },
+    getSkyboxEarth: function(urlPrefix) {
+      var urls = [ urlPrefix + "earth1.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg",
+                   urlPrefix + "black.jpg" ];
       var textureCube = THREE.ImageUtils.loadTextureCube( urls );
       textureCube.format = THREE.RGBFormat;
       textureCube.mapping = THREE.CubeRefractionMapping;
