@@ -15,10 +15,10 @@ window.game.events = function() {
       // Will be used in game.core.player.controlKeys
       keyCodes: {
         32: "space",
-        65: "a",
-        68: "d",
-        83: "s",
-        87: "w"
+        37: "a",
+        39: "d",
+        40: "s",
+        38: "w"
       },
       // This object will contain the pressed key states in real-time
       pressed: {
