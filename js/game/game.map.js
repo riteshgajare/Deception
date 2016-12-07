@@ -13,7 +13,8 @@ window.game.map = function() {
       _map.create_block(-3600,0,-120,200,5,90,_map.texture.pink);
       _map.create_block(-3700,-45,-120,500,5,30,_map.texture.pink);
       _map.create_block(-4500,-45,-300,500,15,30,_map.texture.green);
-      _map.create_block(-5050,-45,-300,50,15,30,_map.texture.finish);
+      // FINISH
+      _map.game.level.finish = _map.create_block(-5050,-45,-300,50,15,30,_map.texture.finish);
 
       //_map.game.level.createGem( -400, 0, 5 );
       _map.game.level.createGem( -1000, 70, 5 );
@@ -25,7 +26,7 @@ window.game.map = function() {
       _map.create_block(-500,15, -5, 100,5,30,_map.texture.blueEarth);
       _map.create_block(-900,75, -5, 100,5,30,_map.texture.blueEarth);
       _map.create_block(-900,-45, -5, 100,5,30,_map.texture.blueEarth);
-      _map.create_block(-1300,-85, -5, 100,5,30,_map.texture.blueEarth);
+      _map.game.level.finish  = _map.create_block(-1300,-85, -5, 100,5,30,_map.texture.blueEarth);
       _map.game.level.skyboxMesh = _map.texture.getSkyboxEarth( 'textures/skybox/' );
     },
     create_block: function(start_x,start_y, start_z,floorSize,floorHeight,floorWidth,blockTexture,collide ){
@@ -42,6 +43,8 @@ window.game.map = function() {
 
       if (collide)
         _map.game.level.collidable.push(block)
+
+      return block;
     },
     init: function(_cannon, _texture, _game) {
       _map.cannon = _cannon;

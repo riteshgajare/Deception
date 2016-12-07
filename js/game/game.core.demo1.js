@@ -182,7 +182,7 @@ window.game.core = function () {
         _game.player.accelerate();
         _game.player.rotate();
         _game.player.updateCamera();
-        _game.player.oxygen -= _game.clock.getDelta();
+        _game.player.oxygen -= difficulty * _game.clock.getDelta();
         _game.hud.updateGauge();
         // Level-specific logic
         _game.player.checkCollision();
@@ -308,6 +308,11 @@ window.game.core = function () {
       },
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
+        if (_cannon.world.collisionMatrix[_game.level.finish.index] &&
+            _cannon.world.collisionMatrix[_game.level.finish.index].length &&
+            (_cannon.world.collisionMatrix[_game.level.finish.index][0] === _game.player.rigidBody.index ||
+             _cannon.world.collisionMatrix[_game.level.finish.index][1] === _game.player.rigidBody.index))
+          alert("Game Over");
 
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
@@ -343,6 +348,7 @@ window.game.core = function () {
       // Methods
       gems: [],
       collidable: [],
+      finish: null,
       createGem: function (positionX, positionY, positionZ) {
         var gem = _cannon.createRigidBody({
           shape: new CANNON.Box(new CANNON.Vec3(_texture.gemSize, _texture.gemSize, _texture.gemSize)),
