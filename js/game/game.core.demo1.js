@@ -13,10 +13,13 @@ window.game.core = function () {
   var score = 0;
   var audio = document.createElement('audio');
   var source = document.createElement('source');
-  source.src = 'sounds/background1.mp3';
+  var collectSound = new Audio('sounds/gem.mp3');
+  var crashSound = new Audio('sounds/crash.mp3');
+  source.src = 'sounds/background.mp3';
   audio.appendChild(source);
   audio.loop = true;
   audio.play();
+  cIdx = -1;
   var _game = {
     // Attributes
     hud: {
@@ -60,7 +63,7 @@ window.game.core = function () {
       shape: null,
       rigidBody: null,
       // Player mass which affects other rigid bodies in the world
-      mass: 100000,
+      mass: 10,
       health: 100,
       gasoline: 100,
       strength: 1,
@@ -155,6 +158,18 @@ window.game.core = function () {
         // Collision event listener for the jump mechanism
         _game.player.rigidBody.addEventListener("collide", function(event) {
           // Checks if player's is on ground
+          for(var i = 0; i < _game.level.gems.length; i++) {
+            if (_cannon.getCollisions(_game.level.gems[i].index)) {
+              collectSound.play();
+              _game.player.speedMax += 10;
+              _cannon.removeVisual(_game.level.gems[i]);
+              _game.level.gems.shift();//splice(cIdx,1);
+              cIdx = i;
+              sleep(0.0000001);
+              break;
+            }
+          }
+
           if (!_game.player.isGrounded) {
             // Ray intersection test to check if player is colliding with an object beneath him
             _game.player.isGrounded = (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, 0, -1)).intersectBody(event.contact.bi).length > 0);
@@ -245,7 +260,7 @@ window.game.core = function () {
       accelerate: function() {
         // Calculate player coordinates by using current acceleration Euler radians from player's last rotatio
         _game.player.playerCoords =  window.game.helpers.polarToCartesian(_game.player.acceleration, _game.player.rotationRadians.z);
-
+        _game.level.skyboxMesh.translateX(_game.player.acceleration / 10 );
         // Set actual XYZ velocity by using calculated Cartesian coordinates
         _game.player.rigidBody.velocity.set(_game.player.playerCoords.x, _game.player.playerCoords.y, _game.player.rigidBody.velocity.z);
 
@@ -293,7 +308,6 @@ window.game.core = function () {
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
 
-        var crashSound = new Audio('sounds/crash.mp3');
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
           _game.destroy();
@@ -310,25 +324,31 @@ window.game.core = function () {
         }
       },
       checkCollision: function () {
-        if (_cannon.getCollisions(_game.player.rigidBody.index) > 1) {
-          //_game.player.health = _game.player.health - killRate / _game.player.strength;
+        // for(var i = 0; i < _game.level.gems.length; i++) {
+        //   if (_cannon.getCollisions(_game.level.gems[i].index)) {
+        if (cIdx != -1) {
+          cIdx = -1;
         }
+        // }
 
-        var collectSound = new Audio('sounds/gem.mp3');
-        for(var i = 0; i < _game.level.gems.length; i++) {
-          if (_cannon.getCollisions(_game.level.gems[i].index)) {
-            collectSound.play();
-            _game.player.speedMax += 50;
-            _cannon.removeVisual(_game.level.gems[i]);
-            _game.level.gems.shift();
+        for(var i = 0; i < _game.level.collidable.length; i++) {
+          if (_cannon.getCollisions(_game.level.collidable[i].index)) {
+            crashSound.play();
+            _game.destroy();
             break;
           }
+        }
+
+
+        if (_cannon.getCollisions(_game.player.rigidBody.index) > 2) {
+          _game.player.health = _game.player.health - killRate / _game.player.strength;
         }
       }
     },
     level: {
       // Methods
       gems: [],
+      collidable: [],
       createGem: function (positionX, positionY, positionZ) {
         var gem = _cannon.createRigidBody({
           shape: new CANNON.Box(new CANNON.Vec3(_texture.gemSize, _texture.gemSize, _texture.gemSize)),
@@ -341,10 +361,10 @@ window.game.core = function () {
       },
       create: function() {
         // Create a solid material for all objects in the world
-              _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
+        _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
-        getMap1(_cannon,_texture,_game.level);
+        _map.getMap1();
         //getMap2(_cannon,_texture,_game.level);
         _three.scene.add( _game.level.skyboxMesh );
       }
@@ -405,8 +425,11 @@ window.game.core = function () {
       _three = window.game.three();
       _cannon = window.game.cannon();
       _ui = window.game.ui();
+      _map = window.game.map();
       _texture = window.game.texture();
       _game.clock = new THREE.Clock();
+      _map.init(_cannon, _texture, _game);
+
       // Setup lights for THREE.js
       _three.setupLights = function () {
         var hemiLight = new THREE.HemisphereLight(window.game.static.colors.white, window.game.static.colors.white, 0.6);
@@ -459,6 +482,7 @@ window.game.core = function () {
   var _texture;
   var _cannon;
   var _ui;
+  var _map;
   var _animationFrameLoop;
   // Game defaults which will be set one time after first start
   var _gameDefaults = {

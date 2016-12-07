@@ -55,7 +55,7 @@ window.game.three = function() {
       // Define default WebGL renderer
       _three.renderer = new THREE.WebGLRenderer({ antialias: true });
       _three.renderer.setPixelRatio ( window.devicePixelRatio / 1.2 );
-      _three.renderer.shadowMap.enabled = true;
+      //_three.renderer.shadowMap.enabled = true;
       //_three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
       // Set the background color (HTML background will be used if this option is omitted)
