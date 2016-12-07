@@ -126,19 +126,22 @@ window.game.core = function () {
       create: function() {
         // Create a global physics material for the player which will be used as ContactMaterial for all other objects in the level
         _cannon.playerPhysicsMaterial = new CANNON.Material("playerMaterial");
+        var modelMaterial = new THREE.MeshBasicMaterial();
+        modelMaterial.map = THREE.ImageUtils.loadTexture("textures/small_fighter_1_diffuse.png");
+        modelMaterial.side = THREE.DoubleSide;
 
         // Create a player character based on an imported 3D model that was already loaded as JSON into game.models.player
-        _game.player.model = _three.createModel(window.game.models.player, 12, [
-          new THREE.MeshLambertMaterial({ color: window.game.static.colors.orange, shading: THREE.FlatShading }),
-          new THREE.MeshLambertMaterial({ color: window.game.static.colors.darkslategray, shading: THREE.FlatShading })
-        ]);
+        // _game.player.model = _three.createModel(window.game.models.player, 12, [
+        //   new THREE.MeshLambertMaterial({ color: window.game.static.colors.orange, shading: THREE.FlatShading }),
+        //   new THREE.MeshLambertMaterial({ color: window.game.static.colors.darkslategray, shading: THREE.FlatShading })
+        // ]);
 
-        // Create the shape, mesh and rigid body for the player character and assign the physics material to it
+        _game.player.model = _three.createModel(window.game.models.player, 12, modelMaterial);
+
         _game.player.shape = new CANNON.Box(_game.player.model.halfExtents);
         _game.player.rigidBody = new CANNON.RigidBody(_game.player.mass, _game.player.shape, _cannon.createPhysicsMaterial(_cannon.playerPhysicsMaterial));
         _game.player.rigidBody.position.set(0, 0, 50);
         _game.player.mesh = _cannon.addVisual(_game.player.rigidBody, null, _game.player.model.mesh);
-
         // Create a HingeConstraint to limit player's air-twisting - this needs improvement
         _game.player.orientationConstraint = new CANNON.HingeConstraint(_game.player.rigidBody,
                                                                         new CANNON.Vec3(0, 0, 0),
@@ -361,8 +364,8 @@ window.game.core = function () {
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
-        //_map.getMap1();
-        _map.getMap2();
+        _map.getMap1();
+        //_map.getMap2();
         _three.scene.add( _game.level.skyboxMesh );
       }
     },
