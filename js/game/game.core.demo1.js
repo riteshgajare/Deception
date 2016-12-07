@@ -19,7 +19,6 @@ window.game.core = function () {
   audio.appendChild(source);
   audio.loop = true;
   audio.play();
-  cIdx = -1;
   var _game = {
     // Attributes
     hud: {
@@ -48,6 +47,7 @@ window.game.core = function () {
       updateGauge: function() {
         // Update the acceleration gauge here
         window.health.set(_game.player.health/100.0);
+        window.oxygen.set(_game.player.oxygen/100.0);
         if (_game.player[_game.player.playerAccelerationValues.position.acceleration] > 0 )
           _game.hud.gauge.set(0);
         else
@@ -66,6 +66,7 @@ window.game.core = function () {
       mass: 10,
       health: 100,
       gasoline: 100,
+      oxygen: 100,
       strength: 1,
       // HingeConstraint to limit player's air-twisting
       orientationConstraint: null,
@@ -164,7 +165,6 @@ window.game.core = function () {
               _game.player.speedMax += 10;
               _cannon.removeVisual(_game.level.gems[i]);
               _game.level.gems.shift();//splice(cIdx,1);
-              cIdx = i;
               sleep(0.0000001);
               break;
             }
@@ -182,6 +182,7 @@ window.game.core = function () {
         _game.player.accelerate();
         _game.player.rotate();
         _game.player.updateCamera();
+        _game.player.oxygen -= _game.clock.getDelta();
         _game.hud.updateGauge();
         // Level-specific logic
         _game.player.checkCollision();
@@ -324,12 +325,6 @@ window.game.core = function () {
         }
       },
       checkCollision: function () {
-        // for(var i = 0; i < _game.level.gems.length; i++) {
-        //   if (_cannon.getCollisions(_game.level.gems[i].index)) {
-        if (cIdx != -1) {
-          cIdx = -1;
-        }
-        // }
 
         for(var i = 0; i < _game.level.collidable.length; i++) {
           if (_cannon.getCollisions(_game.level.collidable[i].index)) {
@@ -339,9 +334,8 @@ window.game.core = function () {
           }
         }
 
-
         if (_cannon.getCollisions(_game.player.rigidBody.index) > 2) {
-          _game.player.health = _game.player.health - killRate / _game.player.strength;
+          //_game.player.health = _game.player.health - killRate / _game.player.strength;
         }
       }
     },
@@ -364,8 +358,8 @@ window.game.core = function () {
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
-        _map.getMap1();
-        //getMap2(_cannon,_texture,_game.level);
+        //_map.getMap1();
+        _map.getMap2();
         _three.scene.add( _game.level.skyboxMesh );
       }
     },

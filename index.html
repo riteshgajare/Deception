@@ -21,7 +21,7 @@
       height:320px;
       padding:10px 30px;
       margin:0 0 0 -300px;
-      background:#ffffff;
+      background:transparent
       box-sizing:border-box;
       }
       #hud {
@@ -54,6 +54,18 @@
       height: 100%;
       display: block;
       }
+      #container {
+      position: absolute;
+      margin: 10px;
+      background: transparent
+      margin: auto;
+      background-color: transparent;
+      bottom: 25px;
+      left: 350px;
+      height: 80px;
+      width: 80px
+      }
+
     </style>
   </head>
 
@@ -68,6 +80,7 @@
           <path id="heart-path" fill-opacity="0" stroke-width="3" stroke="#ED6A5A" d="M81.495,13.923c-11.368-5.261-26.234-0.311-31.489,11.032C44.74,13.612,29.879,8.657,18.511,13.923  C6.402,19.539,0.613,33.883,10.175,50.804c6.792,12.04,18.826,21.111,39.831,37.379c20.993-16.268,33.033-25.344,39.819-37.379  C99.387,33.883,93.598,19.539,81.495,13.923z"/>
         </svg>
       </div>
+      <div id="container"></div>
     </div>
     <!-- If text is set, position: relative will be applied for the container -->
     <div id="infobox-intro" class="infobox">
@@ -97,36 +110,65 @@
     <script>
 
       window.health = new ProgressBar.Path('#heart-path', {
-      easing: 'easeInOut',
-      duration: 1400
+        easing: 'easeInOut',
+        duration: 1400
       });
+
+      window.oxygen = new ProgressBar.Circle(container, {
+        color: '#aaa',
+        // This has to be the same size as the maximum width to
+        // prevent clipping
+        strokeWidth: 4,
+        trailWidth: 1,
+        easing: 'easeInOut',
+        duration: 1400,
+        text: {
+          autoStyleContainer: false
+        },
+        from: { color: '#aaa', width: 1 },
+        to: { color: '#333', width: 4 },
+        // Set default step function for all animate calls
+        step: function(state, circle) {
+          circle.path.setAttribute('stroke', state.color);
+          circle.path.setAttribute('stroke-width', state.width);
+
+          var value = Math.round(circle.value() * 100);
+          if (value === 0) {
+            circle.setText('');
+          } else {
+            circle.setText(value);
+          }
+
+        }
+      });
+      window.oxygen.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+      window.oxygen.text.style.fontSize = '2rem';
 
       if (!Detector.webgl) {
-      Detector.addGetWebGLMessage();
+        Detector.addGetWebGLMessage();
       } else {
-      window.gameInstance = window.game.core();
-      window.gameInstance.init({
-      domContainer: document.querySelector("#game"),
-      rendererClearColor: window.game.static.white
-      });
-
+        window.gameInstance = window.game.core();
+        window.gameInstance.init({
+          domContainer: document.querySelector("#game"),
+          rendererClearColor: window.game.static.white
+        });
       }
 
       (function() {
-      var gameLoop = window.gameInstance.loop;
-      var stats = new Stats();
+        var gameLoop = window.gameInstance.loop;
+        var stats = new Stats();
 
-      stats.domElement.style.position = "absolute";
-      stats.domElement.style.left = "0px";
-      stats.domElement.style.top = "0px";
+        stats.domElement.style.position = "absolute";
+        stats.domElement.style.left = "0px";
+        stats.domElement.style.top = "0px";
 
-      document.body.appendChild( stats.domElement );
+        document.body.appendChild( stats.domElement );
 
-      window.gameInstance.loop = function() {
-      stats.begin();
-      gameLoop();
-      stats.end();
-      }
+        window.gameInstance.loop = function() {
+          stats.begin();
+          gameLoop();
+          stats.end();
+        }
       })();
     </script>
   </body>

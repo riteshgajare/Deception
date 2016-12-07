@@ -1,7 +1,5 @@
 window.game.map = function() {
   var _map = {
-
-
     getMap1: function () {
       _map.create_block(-450,0, -5, 500,5,60,_map.texture.gray);
       _map.create_block(-950,90, -5, 500,5,30,_map.texture.gray);
@@ -22,7 +20,6 @@ window.game.map = function() {
       _map.game.level.createGem( -4000, -50, -50 );
       _map.game.level.skyboxMesh = _map.texture.getSkybox( 'textures/skybox/' );
     },
-
     getMap2: function(){
       _map.create_block(-85,15, -5, 100,5,30,_map.texture.blueEarth);
       _map.create_block(-500,15, -5, 100,5,30,_map.texture.blueEarth);
