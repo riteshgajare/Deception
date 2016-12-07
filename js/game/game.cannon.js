@@ -77,6 +77,16 @@ window.game.cannon = function() {
 
       return collisions;
     },
+    checkCollision: function(body1, body2) {
+      if (_cannon.world.collisionMatrix[body1.index] &&
+          _cannon.world.collisionMatrix[body1.index].length &&
+          (_cannon.world.collisionMatrix[body1.index][0] === body2.index ||
+           _cannon.world.collisionMatrix[body1.index][1] === body2.index))
+        return true;
+
+      return false;
+
+    },
     rotateOnAxis: function(rigidBody, axis, radians) {
       // Equivalent to THREE's Object3D.rotateOnAxis
       var rotationQuaternion = new CANNON.Quaternion();

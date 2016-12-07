@@ -308,11 +308,8 @@ window.game.core = function () {
       },
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
-        if (_cannon.world.collisionMatrix[_game.level.finish.index] &&
-            _cannon.world.collisionMatrix[_game.level.finish.index].length &&
-            (_cannon.world.collisionMatrix[_game.level.finish.index][0] === _game.player.rigidBody.index ||
-             _cannon.world.collisionMatrix[_game.level.finish.index][1] === _game.player.rigidBody.index))
-          alert("Game Over");
+        if (_cannon.checkCollision(_game.level.finish, _game.player.rigidBody))
+            alert("Game Over");
 
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
