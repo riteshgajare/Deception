@@ -15,7 +15,7 @@ window.game.core = function () {
   var source = document.createElement('source');
   var collectSound = new Audio('sounds/gem.mp3');
   var crashSound = new Audio('sounds/crash.mp3');
-  source.src = 'sounds/background.mp3';
+  source.src = 'sounds/background2.mp3';
   audio.appendChild(source);
   audio.loop = true;
   audio.play();
