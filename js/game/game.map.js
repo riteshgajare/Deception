@@ -2,22 +2,23 @@ window.game.map = function() {
   var _map = {
     getMap1: function () {
       _map.create_block(-450,0, -5, 500,5,60,_texture.gray);
-      _map.create_block(-950,90, -5, 500,5,30,_texture.gray);
+      _map.create_block(-750,90, -5, 500,5,30,_texture.gray);
       _map.create_block(-1250,-30, -5,100,5,30,_texture.red,true);
       _map.create_block(-1950,-30, -5, 250,5,30,_texture.gray);
-      _map.create_block(-2500,0, -10, 100,10,90,_texture.normalBlue);
+      _map.create_block(-2500,0, -10, 50,10,90,_texture.normalBlue);
       _map.create_block(-2950,0,-20,200,20,30,_texture.greenPure);
       _map.create_block(-3600,0,-120,200,5,90,_texture.pink);
       // Collision Block
       _map.create_block(-3750,0,-100,150,20,30,_texture.red, true);
+      _map.create_block(-3750,-107,-100,150,20,30,_texture.red, true);
       _map.create_block(-3600,0,-120,200,5,90,_texture.pink);
       _map.create_block(-3700,-45,-120,500,5,30,_texture.pink);
-      _map.create_block(-4500,-45,-300,500,15,30,_texture.green);
+      _map.create_block(-5300,-45,-300,500,15,30,_texture.green);
       // FINISH
-      _game.level.finish = _map.create_block(-5050,-45,-300,50,15,30,_texture.finish);
+      _game.level.finish = _map.create_block(-5800,-45,-300,50,15,30,_texture.finish);
 
-      //_game.level.createGem( -400, 0, 5 );
-      _game.level.createGem( -1000, 70, 5 );
+      _game.level.createGem( -400, 0, 5 );
+      //_game.level.createGem( -1000, 70, 5 );
       _game.level.createGem( -4000, -50, -50 );
       _game.level.skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
     },

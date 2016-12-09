@@ -53,8 +53,8 @@ window.game.three = function() {
       _three.camera.up.set(0, 0, 1);
 
       // Define default WebGL renderer
-      _three.renderer = new THREE.WebGLRenderer({ antialias: false });
-      _three.renderer.setPixelRatio ( window.devicePixelRatio / 1.2 );
+      _three.renderer = new THREE.WebGLRenderer({ antialias: true });
+      _three.renderer.setPixelRatio ( window.devicePixelRatio / 1 );
       //_three.renderer.shadowMap.enabled = true;
       //_three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 

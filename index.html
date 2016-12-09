@@ -16,8 +16,8 @@
       .infobox {
       position:fixed;
       top:30px;
-      left:50%;
-      width:600px;
+      left: 30%;
+      width:2000px;
       height:320px;
       padding:10px 30px;
       margin:0 0 0 -300px;
@@ -66,6 +66,47 @@
       width: 80px
       }
 
+      p{
+      color: lime;
+      font-family: "Courier";
+      font-size: 20px;
+      margin: 10px 0 0 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 30em;
+      animation: type 2s steps(60, end);
+      }
+
+      p:nth-child(2){
+      animation: type2 8s steps(60, end);
+      }
+
+      p a{
+      color: lime;
+      text-decoration: none;
+      }
+
+      span{
+      animation: blink 1s infinite;
+      }
+
+      @keyframes type{
+      from { width: 0; }
+      }
+
+      @keyframes type2{
+      0%{width: 0;}
+      50%{width: 0;}
+      100%{ width: 100; }
+      }
+
+      @keyframes blink{
+      to{opacity: .0;}
+      }
+
+      ::selection{
+      background: black;
+      }
     </style>
   </head>
 
@@ -84,10 +125,10 @@
     </div>
     <!-- If text is set, position: relative will be applied for the container -->
     <div id="infobox-intro" class="infobox">
-      <center> <h2>Interstellar</h2>
-        <img src="controls.png" width="300" heigh="300"/>
+      <!-- <p>We heard the distress signal from that beacon and it has taken us here. </p> -->
+      <p>Press Enter to Start</p>
+      <!-- <img src="controls.png" width="300" heigh="300"/> -->
 
-      </center>
     </div>
     <script src="js/libs/stats.min.js"></script>
 

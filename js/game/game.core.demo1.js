@@ -16,9 +16,6 @@ window.game.core = function () {
   var collectSound = new Audio('sounds/gem.mp3');
   var crashSound = new Audio('sounds/crash.mp3');
   source.src = 'sounds/background.mp3';
-  audio.appendChild(source);
-  audio.loop = true;
-  audio.play();
   var _game = {
     // Attributes
     hud: {
@@ -44,7 +41,7 @@ window.game.core = function () {
         _game.hud.gauge.animationSpeed = 13; // set animation speed (32 is default value)
         _game.hud.gauge.set(0); // set actual value
       },
-      updateGauge: function() {
+      updateHUD: function() {
         // Update the acceleration gauge here
         window.health.set(_game.player.health/100.0);
         window.oxygen.set(_game.player.oxygen/100.0);
@@ -79,7 +76,7 @@ window.game.core = function () {
       speed: 1.5,
       speedMax: 50,
       // Configuration for player rotation (rotation acceleration and maximum rotation speed)
-      rotationSpeed: 0.007,
+      rotationSpeed: 0.005,
       rotationSpeedMax: 0.02,
       // Rotation values
       rotationRadians: new THREE.Vector3(0, 0, 0),
@@ -162,6 +159,14 @@ window.game.core = function () {
         // Collision event listener for the jump mechanism
         _game.player.rigidBody.addEventListener("collide", function(event) {
           // Checks if player's is on ground
+
+          // if ((new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, 1, 0)).intersectBody(event.contact.bi).length > 0) ||
+          //     (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(1, 0, 0)).intersectBody(event.contact.bi).length > 0) ||
+          //     (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(-1, 0, 0)).intersectBody(event.contact.bi).length > 0) ||
+          //     (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, -1, 0)).intersectBody(event.contact.bi).length > 0))
+            //game.player.collide = true;
+            //alert("c");
+
           for(var i = 0; i < _game.level.gems.length; i++) {
             if (_cannon.getCollisions(_game.level.gems[i].index)) {
               collectSound.play();
@@ -174,9 +179,9 @@ window.game.core = function () {
           }
 
           if (!_game.player.isGrounded) {
-            // Ray intersection test to check if player is colliding with an object beneath him
             _game.player.isGrounded = (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, 0, -1)).intersectBody(event.contact.bi).length > 0);
           }
+
         });
       },
       update: function() {
@@ -186,7 +191,7 @@ window.game.core = function () {
         _game.player.rotate();
         _game.player.updateCamera();
         _game.player.oxygen -= difficulty * _game.clock.getDelta();
-        _game.hud.updateGauge();
+        _game.hud.updateHUD();
         // Level-specific logic
         _game.player.checkCollision();
         _game.player.checkGameOver();
@@ -364,8 +369,8 @@ window.game.core = function () {
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
-        _map.getMap1();
-        //_map.getMap2();
+        //_map.getMap1();
+        _map.getMap2();
         _three.scene.add( _game.level.skyboxMesh );
       }
     },
@@ -471,6 +476,9 @@ window.game.core = function () {
       _events.onKeyDown = function () {
         if (!_ui.hasClass("infoboxIntro", "fade-out")) {
           _ui.fadeOut("infoboxIntro");
+          audio.appendChild(source);
+          audio.loop = true;
+          audio.play();
         }
       };
     }
