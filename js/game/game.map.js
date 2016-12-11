@@ -119,22 +119,31 @@ window.game.map = function() {
       _map.create_block(-3750,20,-5,100,5,30,_texture.gray);
 
       // part 7
-      _map.create_block(-4150,80,-5,100,5,30,_texture.gray);
-      _map.create_block(-5150,80,-5,1000,5,150,_texture.gray);
-      _map.create_block(-4160,170,15,10,5,60,_texture.red,true);
-      _map.create_block(-4160,-10,15,10,5,60,_texture.red,true);
-      _map.create_block(-5140,220,15,990,5,10,_texture.red,true);
-      _map.create_block(-5140,-60,15,990,5,10,_texture.red,true);
-      _map.create_block(-6140,170,15,10,5,60,_texture.red,true);
-      _map.create_block(-6140,-10,15,10,5,60,_texture.red,true);
-      
+      _map.create_block(-4150,80,-5,100,5,30,_texture.gray);
+      _map.create_block(-5150,80,-5,1000,5,150,_texture.gray);
+      _map.create_block(-4160,170,15,10,5,60,_texture.red,true);
+      _map.create_block(-4160,-10,15,10,5,60,_texture.red,true);
+      _map.create_block(-5140,220,15,990,5,10,_texture.red,true);
+      _map.create_block(-5140,-60,15,990,5,10,_texture.red,true);
+      _map.create_block(-6140,170,15,10,5,60,_texture.red,true);
+      _map.create_block(-6140,-10,15,10,5,60,_texture.red,true);
+
+      // part 8 : red blocks
+      _map.create_block(-4350,80,35,50,15,30,_texture.red,true);
+
+      _map.create_block(-4750,10,35,50,15,30,_texture.red,true);
+      _map.create_block(-4750,150,35,50,15,30,_texture.red,true);
+
+      _map.create_block(-5150,80,35,50,15,30,_texture.red,true);
+      
+      _map.create_block(-5550,10,35,50,15,30,_texture.red,true);
+      _map.create_block(-5550,150,35,50,15,30,_texture.red,true);
+
+      _map.create_block(-5950,80,55,20,15,150,_texture.red,true);
 
 
 
-
-
-
-      _game.level.finish = _map.create_block(-9810,175,-5,120,2.5,30,_texture.green);
+      _game.level.finish = _map.create_block(-6250,80,-5,200,5,30,_texture.gray);
 
       _game.level.skyboxMesh = _texture.getSkyboxNebula( 'textures/skybox/' );
     },

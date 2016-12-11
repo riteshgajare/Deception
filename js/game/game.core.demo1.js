@@ -370,8 +370,8 @@ window.game.core = function () {
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
         //_map.getMap1();
-        //_map.getMap2();
-        _map.getMap3();
+        _map.getMap2();
+        //_map.getMap3();
         _three.scene.add( _game.level.skyboxMesh );
       }
     },
