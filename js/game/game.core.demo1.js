@@ -15,7 +15,7 @@ window.game.core = function () {
   var source = document.createElement('source');
   var collectSound = new Audio('sounds/gem.mp3');
   var crashSound = new Audio('sounds/crash.mp3');
-  source.src = 'sounds/background.mp3';
+  source.src = 'sounds/background1.mp3';
   var _game = {
     // Attributes
     hud: {
@@ -74,7 +74,7 @@ window.game.core = function () {
 
       // Configuration for player speed (acceleration and maximum speed)
       speed: 1.5,
-      speedMax: 50,
+      speedMax: 75,
       // Configuration for player rotation (rotation acceleration and maximum rotation speed)
       rotationSpeed: 0.005,
       rotationSpeedMax: 0.02,
@@ -316,8 +316,8 @@ window.game.core = function () {
       },
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
-        if (_cannon.checkCollision(_game.level.finish, _game.player.rigidBody))
-            alert("Game Over");
+        if (_cannon.checkCollision(_game.level.finish, _game.player.rigidBody)){}
+            //alert("Game Over");
 
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
@@ -370,7 +370,8 @@ window.game.core = function () {
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
 
         //_map.getMap1();
-        _map.getMap2();
+        //_map.getMap2();
+        _map.getMap3();
         _three.scene.add( _game.level.skyboxMesh );
       }
     },

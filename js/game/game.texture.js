@@ -14,12 +14,12 @@ window.game.texture = function() {
   var _texture = {
 
     grass: 'textures/grass.jpg',
-    green: 'textures/Green.png',
+    green: 'textures/green2.png',
     blue: 'textures/Blue.jpg',
-    greenPure: 'textures/Green_Pure.png',
+    greenPure: 'textures/green1.jpg',
      pink: 'textures/pink.jpg',
      normalBlue: 'textures/normalBlue.png',
-     gray: 'textures/Gray.jpeg',
+     gray: 'textures/Gray.jpg',
      red: 'textures/Red.jpg',
      finish: 'textures/finish.png',
      greenEarth: 'textures/green_earth.jpg',
@@ -95,6 +95,33 @@ window.game.texture = function() {
                    urlPrefix + "black.jpg",
                    urlPrefix + "black.jpg",
                    urlPrefix + "black.jpg" ];
+      var textureCube = THREE.ImageUtils.loadTextureCube( urls );
+      textureCube.format = THREE.RGBFormat;
+      textureCube.mapping = THREE.CubeRefractionMapping;
+
+      var shader = THREE.ShaderLib["cube"];
+      var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+      uniforms['tCube'].value= textureCube;   // textureCube has been init before
+      var material = new THREE.ShaderMaterial({
+        fragmentShader    : shader.fragmentShader,
+        vertexShader  : shader.vertexShader,
+        uniforms  : uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
+      });
+      var skyboxMesh = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000, 1, 1, 1, null, true ), material );
+      skyboxMesh.translateZ(100);
+      skyboxMesh.rotateX(window.game.helpers.degToRad(90));
+      // skyboxMesh.frustumCulled = false;
+      return skyboxMesh;
+    },
+    getSkyboxNebula: function(urlPrefix) {
+      var urls = [ urlPrefix + "galnew1.jpg",
+                   urlPrefix + "galnew1.jpg",
+                   urlPrefix + "galnew1.jpg",
+                   urlPrefix + "galnew1.jpg",
+                   urlPrefix + "galnew1.jpg",
+                   urlPrefix + "galnew1.jpg" ];
       var textureCube = THREE.ImageUtils.loadTextureCube( urls );
       textureCube.format = THREE.RGBFormat;
       textureCube.mapping = THREE.CubeRefractionMapping;
