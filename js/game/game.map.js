@@ -4,7 +4,7 @@ window.game.map = function() {
     getMap1: function () {
       // Part 1
       _map.create_block(-85,0,-5, 100,5,40,_texture.gray);
-      _game.level.finish = _map.create_block(-400,0,-5, 100,5,40,_texture.gray);
+       _map.create_block(-400,0,-5, 100,5,40,_texture.gray);
       _map.create_block(-700,0,-5, 200,5,20,_texture.gray);
 
       // Part 2
@@ -45,7 +45,7 @@ window.game.map = function() {
       _map.create_block(-5100, 0,-15,100,5,20,_texture.grey);
 
       // FINISH
-      _map.create_block(-5250,0,-15,50,5,20,_texture.gray);
+      _game.level.finish =_map.create_block(-5250,0,-15,50,5,20,_texture.gray);
 
       _game.level.createGem( -400, 0, 5 );
       //_game.level.createGem( -1000, 70, 5 );
