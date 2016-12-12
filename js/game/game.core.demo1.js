@@ -316,24 +316,26 @@ window.game.core = function () {
       },
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
-        
+
         if (_cannon.getCollisions(_game.level.finish.index)){
 
-            
+
             difficulty++;
             _game.destroy();
             if(_ui.hasClass("infoboxIntro", "fade-out")){
                 document.getElementById('introImg').src = 'controls.png';
               _ui.removeClass("infoboxIntro","fade-out");
             }
-            
+
           }
 
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
+          // Recreate player and level objects by using initial values which were copied at the first start
+
           _game.destroy();
         }
-        if (_game.player.health <= 0) {
+        if ((_game.player.health <= 0) || (_game.player.oxygen <= 0)) {
           crashSound.play();
           _game.destroy();
         }
@@ -378,9 +380,6 @@ window.game.core = function () {
         // Create a solid material for all objects in the world
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
-      
-
-
         if(difficulty == 1) {_map.getMap1(); console.log(_game.level.finish);}
         if(difficulty == 2) {_map.getMap2(); console.log(_game.level.finish);}
         if(difficulty == 3) {_map.getMap3(); console.log(_game.level.finish);}
@@ -447,7 +446,7 @@ window.game.core = function () {
       _map = window.game.map();
       _texture = window.game.texture();
       _game.clock = new THREE.Clock();
-      
+
       _map.init(_cannon, _texture, _game);
 
       // Setup lights for THREE.js
