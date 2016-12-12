@@ -144,6 +144,36 @@ window.game.texture = function() {
       // skyboxMesh.frustumCulled = false;
       return skyboxMesh;
     },
+
+    getSkyboxCredits: function(urlPrefix) {
+      var urls = [ urlPrefix + "credits1.png",
+                   urlPrefix + "credits1.png",
+                   urlPrefix + "credits1.png",
+                   urlPrefix + "credits1.png",
+                   urlPrefix + "credits1.png",
+                   urlPrefix + "credits1.png" ];
+      var textureCube = THREE.ImageUtils.loadTextureCube( urls );
+      textureCube.format = THREE.RGBFormat;
+      textureCube.mapping = THREE.CubeRefractionMapping;
+
+      var shader = THREE.ShaderLib["cube"];
+      var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+      uniforms['tCube'].value= textureCube;   // textureCube has been init before
+      var material = new THREE.ShaderMaterial({
+        fragmentShader    : shader.fragmentShader,
+        vertexShader  : shader.vertexShader,
+        uniforms  : uniforms,
+        depthWrite: false,
+        side: THREE.BackSide
+      });
+      var skyboxMesh = new THREE.Mesh( new THREE.CubeGeometry( 10000, 10000, 10000, 1, 1, 1, null, true ), material );
+      skyboxMesh.translateZ(100);
+      skyboxMesh.rotateX(window.game.helpers.degToRad(90));
+      // skyboxMesh.frustumCulled = false;
+      return skyboxMesh;
+    },
+
+
     getSkyboxEarth: function(urlPrefix) {
       var urls = [ urlPrefix + "earth1.jpg",
                    urlPrefix + "black.jpg",

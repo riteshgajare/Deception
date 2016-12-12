@@ -4,7 +4,7 @@ window.game.map = function() {
     getMap1: function () {
       // Part 1
       _map.create_block(-85,0,-5, 100,5,40,_texture.gray);
-      _map.create_block(-400,0,-5, 100,5,40,_texture.gray);
+      _game.level.finish = _map.create_block(-400,0,-5, 100,5,40,_texture.gray);
       _map.create_block(-700,0,-5, 200,5,20,_texture.gray);
 
       // Part 2
@@ -45,7 +45,7 @@ window.game.map = function() {
       _map.create_block(-5100, 0,-15,100,5,20,_texture.grey);
 
       // FINISH
-      _game.level.finish = _map.create_block(-5250,0,-15,50,5,20,_texture.gray);
+      _map.create_block(-5250,0,-15,50,5,20,_texture.gray);
 
       _game.level.createGem( -400, 0, 5 );
       //_game.level.createGem( -1000, 70, 5 );
@@ -122,8 +122,8 @@ window.game.map = function() {
       _map.create_block(-5950,80,55,20,15,150,_texture.red,true);
 
       // finish
-      _game.level.finish = _map.create_block(-6250,80,-5,200,5,30,_texture.gray);
-      _map.create_block(-6300,80,-5,100,5,30,_texture.gray);
+      _map.create_block(-6250,80,-5,200,5,30,_texture.gray);
+      _game.level.finish = _map.create_block(-6300,80,-5,100,5,30,_texture.gray);
 
       _game.level.skyboxMesh = _texture.getSkyboxNebula( 'textures/skybox/' );
     },
@@ -174,20 +174,21 @@ window.game.map = function() {
       _map.create_block(-9330,105,-5,60,2.5,30,_texture.greenPure);
       _map.create_block(-9450,135,-5,60,2.5,30,_texture.green);
       _map.create_block(-9570,175,-5,60,2.5,30,_texture.greenPure);
-      _game.level.finish = _map.create_block(-9810,175,-5,120,2.5,30,_texture.green);
-      _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
+      _map.create_block(-9810,175,-5,120,2.5,30,_texture.green);
+      _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
 
       _game.level.skyboxMesh = _texture.getSkyboxEarth( 'textures/skybox/' );
     },
 
+    getMap4: function(){
+      _map.create_block(-50,0,-5, 100,5,150,_texture.red);
+      _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
+      _game.level.skyboxMesh = _texture.getSkyboxCredits( 'textures/skybox/' );
 
-    
-    
+    },
 
 
-
-
-
+  
     create_block: function(start_x,start_y, start_z,floorSize,floorHeight,floorWidth,blockTexture,collide ){
 
       if (typeof(collide)==='undefined') collide = false;
@@ -200,8 +201,8 @@ window.game.map = function() {
         physicsMaterial: _cannon.solidMaterial
       });
 
-      // if (collide)
-      //   _game.level.collidable.push(block)
+       if (collide)
+         _game.level.collidable.push(block)
 
       return block;
     },

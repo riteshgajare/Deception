@@ -79,19 +79,19 @@
       white-space: nowrap;
       overflow: hidden;
       width: 30em;
-      animation: type 12s steps(60, end);
+      animation: type 5s steps(6000, end);
       }
 
       p:nth-child(2){
-      animation: type 12s steps(60, end);
+      animation: type 5s steps(6000, end);
       }
 
       p:nth-child(3){
-      animation: type2 12s steps(60, end);
+      animation: type2 5s steps(6000, end);
       }
 
       p:nth-child(4){
-      animation: type3 12s steps(60, end);
+      animation: type3 5s steps(6000, end);
       }
 
       p a{
@@ -194,6 +194,11 @@
 
       a { color:red }
       canvas { pointer-events:none; z-index:10; }
+
+
+      #story2 {display: none;}
+      #story3 {display: none;}
+      #end { display: none;}
     </style>
   </head>
 
@@ -212,26 +217,37 @@
     </div>
     <!-- If text is set, position: relative will be applied for the container -->
     <div id="infobox-intro" class="infobox">
-      <p>Beings of the Earth! We need your help!</p>
-      <p>Please find us!!</p>
+    <div id="story1">
+      <p>BEINGS OF THE EARTH ! WE NEED YOUR HELP . . .</p>
       <p style="color:orange;font-size: 105px;" >INTO THE VOID <span>|</span></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p>Creators:</p> 
-      <p>Amit, Prathamesh & Ritesh</p>
-      <!--<img id="introImg" src="level1.png" width="1000" height="700" />-->
-
     </div>
 
+    <div id="story2">
+      <p style="color:red;font-weight:bold;">BEWARE OF RED !</p>
+      <p style="color:orange;font-size: 105px;" >DECEPTION <span>|</span></p>
+    </div>
+
+
+    <div id="story3">
+      <p>RUN FROM DECEIT</p>
+      <p style="color:orange;font-size: 105px;" >ESCAPE <span>|</span></p>
+    </div>
+
+    <div id="end">
+    <p style="color:lime;font-size: 105px;" >BACK HOME<span>|</span></p>
+    <p style="color:orange;">Created By:</p> 
+    <p style="color:orange;">Amit Rao</p>
+    <p style="color:orange;">Prathamesh Prabhudesai</p> 
+    <p style="color:orange;">Ritesh Gajare</p>
+    <p> Developed at North Carolina State University</p> 
+    </div>
+
+
+
+    </div>
     
 
-
-
-
+  
 
     <script src="js/libs/stats.min.js"></script>
 
@@ -252,6 +268,17 @@
     <script src="js/game/game.map.js"></script>
     <script src="https://rawgit.com/kimmobrunfeldt/progressbar.js/1.0.0/dist/progressbar.js"></script>
     <script>
+
+      function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
+
 
       window.health = new ProgressBar.Path('#heart-path', {
         easing: 'easeInOut',
@@ -317,3 +344,6 @@
     </script>
   </body>
 </html>
+
+
+

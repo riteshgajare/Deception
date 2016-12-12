@@ -11,11 +11,20 @@ window.game.core = function () {
   var difficulty = 1;
   var lifes = 30;
   var score = 0;
+
   var audio = document.createElement('audio');
   var source = document.createElement('source');
+  source.src = 'sounds/level2.mp3';
+
+
+  //source.src = 'sounds/background1.mp3';
+  //source1.src = 'sounds/level2.mp3';
+  //source2.src = 'sounds/level3.mp3';
+  //source3.src = 'sounds/level1.mp3';
+
   var collectSound = new Audio('sounds/gem.mp3');
-  var crashSound = new Audio('sounds/crash.mp3');
-  source.src = 'sounds/background2.mp3';
+  var crashSound = new Audio('sounds/Explosie.mp3');
+  
   var _game = {
     // Attributes
     hud: {
@@ -319,28 +328,49 @@ window.game.core = function () {
 
         if (_cannon.getCollisions(_game.level.finish.index)){
 
-
             difficulty++;
             _game.destroy();
+
             if(_ui.hasClass("infoboxIntro", "fade-out")){
-                document.getElementById('introImg').src = 'controls.png';
+                if(difficulty == 2){
+                  document.getElementById('story1').style.display = 'none';
+                  document.getElementById('story2').style.display = 'inline';
+                  document.getElementById('story3').style.display = 'none';
+                  document.getElementById('end').style.display = 'none';
+
+                }
+                if(difficulty == 3){
+                  document.getElementById('story1').style.display = 'none';
+                  document.getElementById('story2').style.display = 'none';
+                  document.getElementById('story3').style.display = 'inline';
+                  document.getElementById('end').style.display = 'none';
+
+                }
+                if(difficulty == 4){
+                  document.getElementById('story1').style.display = 'none';
+                  document.getElementById('story2').style.display = 'none';
+                  document.getElementById('story3').style.display = 'none';
+                  document.getElementById('end').style.display = 'inline';
+                }
+
+                
               _ui.removeClass("infoboxIntro","fade-out");
             }
 
           }
 
         if (_game.player.mesh.position.z <= -800) {
-          crashSound.play();
+          //crashSound.play();
           // Recreate player and level objects by using initial values which were copied at the first start
 
           _game.destroy();
         }
         if ((_game.player.health <= 0) || (_game.player.oxygen <= 0)) {
-          crashSound.play();
+          //crashSound.play();
           _game.destroy();
         }
         if (lifes == 0) {
-          crashSound.play();
+          //crashSound.play();
           _game.gameOver();
 
           audio.pause();
@@ -380,9 +410,10 @@ window.game.core = function () {
         // Create a solid material for all objects in the world
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
-        if(difficulty == 1) {_map.getMap1(); console.log(_game.level.finish);}
-        if(difficulty == 2) {_map.getMap2(); console.log(_game.level.finish);}
-        if(difficulty == 3) {_map.getMap3(); console.log(_game.level.finish);}
+        if(difficulty == 1) { _map.getMap1(); }
+        if(difficulty == 2) { _map.getMap2(); }
+        if(difficulty == 3) { _map.getMap3(); }
+        if(difficulty == 4) {_map.getMap4(); }
         _three.scene.add( _game.level.skyboxMesh );
       }
     },
@@ -397,6 +428,7 @@ window.game.core = function () {
       _game.clock.start();
 
       _game.loop();
+      audio.play();
 
     },
     gameOver: function() {
@@ -490,9 +522,10 @@ window.game.core = function () {
       _events.onKeyDown = function () {
         if (!_ui.hasClass("infoboxIntro", "fade-out")) {
           _ui.fadeOut("infoboxIntro");
+          
           audio.appendChild(source);
-          audio.loop = true;
           audio.play();
+          audio.loop();
         }
       };
     }
