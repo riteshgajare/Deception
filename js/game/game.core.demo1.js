@@ -9,13 +9,13 @@ window.game = window.game || {};
 window.game.core = function () {
   const killRate = 10;
   var difficulty = 1;
-  var lifes = 3;
+  var lifes = 30;
   var score = 0;
   var audio = document.createElement('audio');
   var source = document.createElement('source');
   var collectSound = new Audio('sounds/gem.mp3');
   var crashSound = new Audio('sounds/crash.mp3');
-  source.src = 'sounds/background1.mp3';
+  source.src = 'sounds/background2.mp3';
   var _game = {
     // Attributes
     hud: {
@@ -316,8 +316,18 @@ window.game.core = function () {
       },
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
-        if (_cannon.checkCollision(_game.level.finish, _game.player.rigidBody)){}
-            //alert("Game Over");
+        
+        if (_cannon.getCollisions(_game.level.finish.index)){
+
+            
+            difficulty++;
+            _game.destroy();
+            if(_ui.hasClass("infoboxIntro", "fade-out")){
+                document.getElementById('introImg').src = 'controls.png';
+              _ui.removeClass("infoboxIntro","fade-out");
+            }
+            
+          }
 
         if (_game.player.mesh.position.z <= -800) {
           crashSound.play();
@@ -344,7 +354,7 @@ window.game.core = function () {
           }
         }
 
-        if (_cannon.getCollisions(_game.player.rigidBody.index) > 2) {
+        if (_cannon.getCollisions(_game.player.rigidBody.index) > 1) {
           //_game.player.health = _game.player.health - killRate / _game.player.strength;
         }
       }
@@ -368,10 +378,12 @@ window.game.core = function () {
         // Create a solid material for all objects in the world
         _cannon.solidMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("solidMaterial"), 0, 0.1);
         _cannon.gemMaterial = _cannon.createPhysicsMaterial(new CANNON.Material("gemMaterial"), 0, 0);
+      
 
-        //_map.getMap1();
-        _map.getMap2();
-        //_map.getMap3();
+
+        if(difficulty == 1) {_map.getMap1(); console.log(_game.level.finish);}
+        if(difficulty == 2) {_map.getMap2(); console.log(_game.level.finish);}
+        if(difficulty == 3) {_map.getMap3(); console.log(_game.level.finish);}
         _three.scene.add( _game.level.skyboxMesh );
       }
     },

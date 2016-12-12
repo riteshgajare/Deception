@@ -36,6 +36,12 @@ window.game.ui = function() {
         _ui.addClass(element, "fade-out");
       }
     },
+
+    fadeIn: function(element){
+      if (!_ui.hasClass(element, "fade-in")) {
+        _ui.addClass(element, "fade-in");
+      }
+    },
     addClass: function (element, className, resetClassName) {
       // Adds a class to a specified element
       if (resetClassName && _ui.elements[element].getAttribute("data-classname")) {

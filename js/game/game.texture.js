@@ -1,3 +1,4 @@
+
 // Textures from http://opengameart.org/
 
 // http://opengameart.org/content/dark-grass
@@ -16,7 +17,8 @@ window.game.texture = function() {
     grass: 'textures/grass.jpg',
     green: 'textures/green2.png',
     blue: 'textures/Blue.jpg',
-    greenPure: 'textures/green1.jpg',
+    greenPure: 'textures/green3.png',
+    grey: 'textures/grey.png',
      pink: 'textures/pink.jpg',
      normalBlue: 'textures/normalBlue.png',
      gray: 'textures/Gray.jpg',
