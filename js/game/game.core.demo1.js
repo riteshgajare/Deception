@@ -384,6 +384,7 @@ window.game.core = function () {
       _game.hud.create();
       // Initiate the game loop
       _game.clock.start();
+
       _game.loop();
 
     },
@@ -434,6 +435,7 @@ window.game.core = function () {
       _map = window.game.map();
       _texture = window.game.texture();
       _game.clock = new THREE.Clock();
+      
       _map.init(_cannon, _texture, _game);
 
       // Setup lights for THREE.js
