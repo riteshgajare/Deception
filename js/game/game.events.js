@@ -18,7 +18,9 @@ window.game.events = function() {
         37: "a",
         39: "d",
         40: "s",
-        38: "w"
+        38: "w",
+        78: "n",
+        71: "g"
       },
       // This object will contain the pressed key states in real-time
       pressed: {
@@ -29,6 +31,7 @@ window.game.events = function() {
       onKeyDown: function(event) {
         // Set the pressed state for a key
         _events.keyboard.pressed[_events.keyboard.keyCodes[event.keyCode]] = true;
+
         // Fire common onKeyDown event which can be set from outside
         _events.onKeyDown();
       },

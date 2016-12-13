@@ -11,11 +11,11 @@ window.game.core = function () {
   var difficulty = 1;
   var lifes = 30;
   var score = 0;
-
+  var changed = false;
   var audio = document.createElement('audio');
   var source = document.createElement('source');
   source.src = 'sounds/level2.mp3';
-
+  var gravityC = false;
 
   //source.src = 'sounds/background1.mp3';
   //source1.src = 'sounds/level2.mp3';
@@ -24,7 +24,7 @@ window.game.core = function () {
 
   var collectSound = new Audio('sounds/gem.mp3');
   var crashSound = new Audio('sounds/Explosie.mp3');
-  
+
   var _game = {
     // Attributes
     hud: {
@@ -203,6 +203,7 @@ window.game.core = function () {
         _game.hud.updateHUD();
         // Level-specific logic
         _game.player.checkCollision();
+        //_game.player.nextLevel();
         _game.player.checkGameOver();
 
       },
@@ -326,6 +327,7 @@ window.game.core = function () {
       checkGameOver: function () {
         // Example game over mechanism which resets the game if the player is falling beneath -800
 
+
         if (_cannon.getCollisions(_game.level.finish.index)){
 
             difficulty++;
@@ -353,7 +355,7 @@ window.game.core = function () {
                   document.getElementById('end').style.display = 'inline';
                 }
 
-                
+
               _ui.removeClass("infoboxIntro","fade-out");
             }
 
@@ -429,6 +431,7 @@ window.game.core = function () {
 
       _game.loop();
       audio.play();
+      audio.loop();
 
     },
     gameOver: function() {
@@ -437,6 +440,7 @@ window.game.core = function () {
       _three.destroy();
     },
     destroy: function() {
+      changed = false;
       // Pause animation frame loop
       window.cancelAnimationFrame(_animationFrameLoop);
       // Destroy THREE.js scene and Cannon.js world and recreate them
@@ -520,9 +524,26 @@ window.game.core = function () {
 
       // Add specific events for key down
       _events.onKeyDown = function () {
+        if (!changed)
+          if (_events.keyboard.pressed["n"]){
+            if (difficulty < 4) {
+              difficulty++;
+              changed = true;
+              _game.destroy();
+            }
+          }
+        if (_events.keyboard.pressed["g"]){
+          if (!gravityC) {
+            gravityC = true;
+            _cannon.world.gravity.set(0, 0, 0);
+          }else {
+            gravityC = false;
+            _cannon.world.gravity.set(0, 0, _cannon.gravity);
+          }
+        }
         if (!_ui.hasClass("infoboxIntro", "fade-out")) {
           _ui.fadeOut("infoboxIntro");
-          
+
           audio.appendChild(source);
           audio.play();
           audio.loop();

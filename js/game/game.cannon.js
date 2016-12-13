@@ -77,6 +77,15 @@ window.game.cannon = function() {
 
       return collisions;
     },
+    bodiesAreInContact: function(bodyA, bodyB){
+      for(var i=0; i< _cannon.world.contacts.length; i++){
+        var c = _cannon.world.contacts[i];
+        if((c.bi === bodyA && c.bj === bodyB) || (c.bi === bodyB && c.bj === bodyA)){
+          return true;
+        }
+      }
+      return false;
+    },
     checkCollision: function(body1, body2) {
       if (_cannon.world.collisionMatrix[body1.index] &&
           _cannon.world.collisionMatrix[body1.index].length &&
