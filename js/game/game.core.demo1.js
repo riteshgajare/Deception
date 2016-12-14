@@ -168,8 +168,15 @@ window.game.core = function () {
 
         // Collision event listener for the jump mechanism
         _game.player.rigidBody.addEventListener("collide", function(event) {
-          // Checks if player's is on ground
 
+          // if (event.contact.bj == _game.player.rigidBody)
+          //   if (!(new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, 0, -1)).intersectBody(event.contact.bi).length > 0)) {
+          //     _game.player.health = _game.player.health - killRate / _game.player.strength;
+          //     console.log(_game.player.health);
+          //   }
+
+          //
+          // Checks if player's is on ground
           // if ((new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(0, 1, 0)).intersectBody(event.contact.bi).length > 0) ||
           //     (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(1, 0, 0)).intersectBody(event.contact.bi).length > 0) ||
           //     (new CANNON.Ray(_game.player.mesh.position, new CANNON.Vec3(-1, 0, 0)).intersectBody(event.contact.bi).length > 0) ||

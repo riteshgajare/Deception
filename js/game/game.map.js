@@ -181,13 +181,11 @@ window.game.map = function() {
     },
 
     getMap4: function(){
-      _map.create_block(-50,0,-5, 100,5,150,_texture.red);
-      _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
+      _map.create_block(-50,0,-5, 100,5,150,_texture.grey);
+      _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.grey);
       _game.level.skyboxMesh = _texture.getSkyboxCredits( 'https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/skybox/' );
 
     },
-
-
 
     create_block: function(start_x,start_y, start_z,floorSize,floorHeight,floorWidth,blockTexture,collide ){
 
