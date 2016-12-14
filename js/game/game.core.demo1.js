@@ -133,7 +133,8 @@ window.game.core = function () {
         // Create a global physics material for the player which will be used as ContactMaterial for all other objects in the level
         _cannon.playerPhysicsMaterial = new CANNON.Material("playerMaterial");
         var modelMaterial = new THREE.MeshBasicMaterial();
-        modelMaterial.map = THREE.ImageUtils.loadTexture("textures/small_fighter_1_diffuse.png");
+        THREE.ImageUtils.crossOrigin = 'anonymous';
+        modelMaterial.map = THREE.ImageUtils.loadTexture("https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/small_fighter_1_diffuse.png");
         modelMaterial.side = THREE.DoubleSide;
 
         // Create a player character based on an imported 3D model that was already loaded as JSON into game.models.player

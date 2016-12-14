@@ -1,4 +1,3 @@
-
 // Textures from http://opengameart.org/
 
 // http://opengameart.org/content/dark-grass
@@ -13,22 +12,11 @@ window.game = window.game || {};
 
 window.game.texture = function() {
   var _texture = {
-
-    grass: 'textures/grass.jpg',
-    green: 'textures/green2.png',
-    blue: 'textures/Blue.jpg',
-    greenPure: 'textures/green3.png',
-    grey: 'textures/grey.png',
-     pink: 'textures/pink.jpg',
-     normalBlue: 'textures/normalBlue.png',
-     gray: 'textures/Gray.jpg',
-     red: 'textures/Red.jpg',
-     finish: 'textures/finish.png',
-     greenEarth: 'textures/green_earth.jpg',
-     blueEarth: 'textures/blue_earth.jpg',
-
-
-    road: 'textures/minecraft_stone.jpg',
+    green: window.game.static.colors.green,
+    greenPure: window.game.static.colors.greenPure,
+    grey: window.game.static.colors.grey,
+    gray: window.game.static.colors.gray,
+    red: window.game.static.colors.red,
     gemSize: 5,
     getTextureMaterial: function(opts, type) {
       opts		= opts	|| {}

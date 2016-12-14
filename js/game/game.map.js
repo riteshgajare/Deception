@@ -1,6 +1,6 @@
 window.game.map = function() {
   var _map = {
-    
+
     getMap1: function () {
       // Part 1
       _map.create_block(-85,0,-5, 100,5,40,_texture.gray);
@@ -50,7 +50,7 @@ window.game.map = function() {
       _game.level.createGem( -400, 0, 5 );
       //_game.level.createGem( -1000, 70, 5 );
       _game.level.createGem( -4000, -50, -50 );
-      _game.level.skyboxMesh = _texture.getSkybox( 'textures/skybox/' );
+      _game.level.skyboxMesh = _texture.getSkybox( 'https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/skybox/' );
     },
 
 
@@ -115,7 +115,7 @@ window.game.map = function() {
       _map.create_block(-4750,150,35,50,15,30,_texture.red,true);
 
       _map.create_block(-5150,80,35,50,15,30,_texture.red,true);
-      
+
       _map.create_block(-5550,10,35,50,15,30,_texture.red,true);
       _map.create_block(-5550,150,35,50,15,30,_texture.red,true);
 
@@ -125,7 +125,7 @@ window.game.map = function() {
       _map.create_block(-6250,80,-5,200,5,30,_texture.gray);
       _game.level.finish = _map.create_block(-6300,80,-5,100,5,30,_texture.gray);
 
-      _game.level.skyboxMesh = _texture.getSkyboxNebula( 'textures/skybox/' );
+      _game.level.skyboxMesh = _texture.getSkyboxNebula( 'https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/skybox/' );
     },
 
 
@@ -158,7 +158,7 @@ window.game.map = function() {
       _map.create_block(-7300,-10,25,100,10,30,_texture.green);
       _map.create_block(-7800,-10,0,100,10,30,_texture.greenPure);
 
-      
+
       _map.create_block(-8200,45,-5,30,2.5,30,_texture.green);
       _map.create_block(-8260,45,-5,30,2.5,60,_texture.greenPure);
       _map.create_block(-8320,45,-5,30,2.5,90,_texture.green);
@@ -177,18 +177,18 @@ window.game.map = function() {
       _map.create_block(-9810,175,-5,120,2.5,30,_texture.green);
       _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
 
-      _game.level.skyboxMesh = _texture.getSkyboxEarth( 'textures/skybox/' );
+      _game.level.skyboxMesh = _texture.getSkyboxEarth( 'https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/skybox/' );
     },
 
     getMap4: function(){
       _map.create_block(-50,0,-5, 100,5,150,_texture.red);
       _game.level.finish = _map.create_block(-9860,175,-5,100,2.5,30,_texture.green);
-      _game.level.skyboxMesh = _texture.getSkyboxCredits( 'textures/skybox/' );
+      _game.level.skyboxMesh = _texture.getSkyboxCredits( 'https://raw.githubusercontent.com/riteshgajare/RoadCrosser-3D/master/textures/skybox/' );
 
     },
 
 
-  
+
     create_block: function(start_x,start_y, start_z,floorSize,floorHeight,floorWidth,blockTexture,collide ){
 
       if (typeof(collide)==='undefined') collide = false;
@@ -197,7 +197,7 @@ window.game.map = function() {
         shape: new CANNON.Box(new CANNON.Vec3(floorSize, floorWidth, floorHeight)),
         mass: 0,
         position: new CANNON.Vec3(start_x,start_y,start_z/2),
-        meshMaterial: _texture.getTextureMaterial({ width: floorWidth, height: floorSize, repeatX: 20 , repeatY: 2}, blockTexture),
+        meshMaterial: new THREE.MeshLambertMaterial({ color: blockTexture }), //_texture.getTextureMaterial({ width: floorWidth, height: floorSize, repeatX: 20 , repeatY: 2}, blockTexture),
         physicsMaterial: _cannon.solidMaterial
       });
 
