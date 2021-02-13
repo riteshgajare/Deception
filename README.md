@@ -1,4 +1,4 @@
-# Deception
+# Deception - A Spaceship travel game developed in JS and WebGL
 
 ## How to Play
 
